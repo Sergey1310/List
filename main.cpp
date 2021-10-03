@@ -6,50 +6,52 @@ public:
     List();
     ~List();
 
-    void PushBack(int data);
-    void PushFront(int data);
-    void Insert (int data, int index);
+    // Добавление элементов
+    void PushBack(int data); // Добавить элемент в конец списка
+    void PushFront(int data); // Добавить элемент в начало списка
+    void Insert (int data, int index); // Добавить элемент в указанное место
 
-    void Clear();
-    void PopBack();
-    void PopFront();
-    void Remove (int index);
+    // Удаление элементов
+    void Clear(); // Очистить список от всех элементов
+    void PopBack(); // Удалить последний элемент списка
+    void PopFront(); // Удалить Первый элемент списка
+    void Remove (int index); // Удалить указанный элемент
 
-    int GetSize();
-    int Sum();
-    void Revers();
-    int& operator[] (const int index);
+    // Вспомогательные функции
+    int GetSize(); // Получить размер списка
+    int Sum(); // Получить сумму всех элементов списка
+    void Revers(); // Развернуть список
+    int& operator[] (const int index); // Перегруженный оператор индексирования, позволяет получить выбранный элемент списка
 
 
 
 private:
-    struct Node
+    struct Node // Ячейка хранящая данные списка
     {
-        int data;
-        Node *pNext;
-        Node *pPrev;
+        int data; //Хранимые данные
+        Node *pNext; // Указатель на следующий элемент
+        Node *pPrev; // Указатель на предыдущий элемент
 
-        Node(int data = 0, Node *pNext = nullptr, Node *pPrev = nullptr)
+        Node(int data = 0, Node *pNext = nullptr, Node *pPrev = nullptr) // Конструктор
         {
             this->data = data;
             this->pNext = pNext;
             this->pPrev = pPrev;
         }
-
     };
-    int size;
-    Node *head;
-    Node *tail;
+    int size; // Переменная хранящая размер списка
+    Node *head; // Указатель на первый элемент списка
+    Node *tail; // Указатель на последний элемент списка
 
-    Node* Serch (Node *PREV, int &index);
-    friend std::ostream &operator<<(std::ostream &os, List const &a);
+    Node* Serch (Node *PREV, int &index); // Функция поиска элемента по индексу, возвращает указатель на найденный элемент
+    friend std::ostream &operator<<(std::ostream &os, List const &a); // Делаем оператор перегрузки вывода - френдом
 };
 
 std::ostream &operator<<(std::ostream &os, List const &a) {
-    int count = 0;
-    List::Node *current = a.head;
-    std::cout << "\n";
-    while (current)
+    int count = 0; // Счётчик элементов списка - для отображения
+    List::Node *current = a.head; // Создаём указатель на текущий элемент и даём ему адрес первого элемента
+    std::cout << "\n"; // Отступаем строку для лучшего отображения
+    while (current) // Цикл отображающий данные элементов списка
     {
         ++count;
         std::cout << count << "\t Data = " << current->data << "\t Current address = " << current;
@@ -58,163 +60,161 @@ std::ostream &operator<<(std::ostream &os, List const &a) {
             std::cout << "\t\t Next address = " << current->pNext << std::endl;
         else
             std::cout << "\t Next address = " << current->pNext << std::endl;
-        current = current->pNext;
+        current = current->pNext; // После завершения вывода, присваиваем указателю на текущий элемент - адресс следующего элемента
     }
-    if (a.size == 0)
-        std::cout << "\nList is empty!" << std::endl;
-    std::cout << "Size = " << a.size << std::endl;
+    if (a.size) // Проверка существования списка
+        std::cout << "\nList is empty!" << std::endl; // Если список пуст, вывести информацию об этом на экран
+    std::cout << "Size = " << a.size << std::endl; // Выводим размер списка
 };
 
-List::List():head(nullptr), tail(nullptr), size(0) {}
-List::~List() {Clear(); std::cout << "Destructor was run!" << std::endl;}
+List::List():head(nullptr), tail(nullptr), size(0) {} // Определяем конструктор списка по умолчанию
+List::~List() {Clear(); std::cout << "Destructor was run!" << std::endl;} // Определяем диструктор - запускается фунция очистки списка и сообщение о вызове диструктора
 
 void List::PushBack(int data)
 {
-    if (!head)
+    if (!head) // Если список пуст то создаём новый элемент, который будет и началом и концом списка
         head = tail = new Node (data);
-    else
+    else // В противном случае добавляем новый элемент в конец списка
     {
-        Node *temp = new Node (data, nullptr, tail);
-        tail->pNext = temp;
-        tail = temp;
+        Node *temp = new Node (data, nullptr, tail); // Создаём новый элемент с пустым указателем на следующий элемент и указателем на последний элемент списка
+        tail->pNext = temp; // Присваивает последнему элементу списка указателю следующего элемента - адрес нового элемента
+        tail = temp; // Присваиваем указателю на последний элемент - адрес нового элемента
     }
-    ++size;
+    ++size; // Увеличиваем счётчик элементов списка
 
 }
 void List::PushFront(int data)
 {
-    if (!head)
+    if (!head) // Если список пуст то создаём новый элемент, который будет и началом и концом списка
         head = tail = new Node (data);
-    else
+    else // В противном случае добавляем новый элемент в начало списка
     {
-        Node *temp = new Node(data,head);
-        head->pPrev = temp;
-        head = temp;
+        Node *temp = new Node(data,head); // Создаём новый элемент с нулевым указателем на предыдущий элемент и адрессом на первый элемент списка в указателе на следующий
+        head->pPrev = temp; // Первому элементу списка в указатель на предыдущий элемент записываем адресс нового элемента списка
+        head = temp; // Передаём указателю на первый элемент - адресс нового элемента
     }
-    ++size;
+    ++size; // Увеличиваем счётчик элементов списка
 }
 void List::Insert(int data, int index) {
-    if (!head)
+    if (!head || (index == size+1)) // Если список пуст или нужно добавить следующий за последним элемент - вызываем фунцию добавитть в конец - чтобы не писать лишний код
         PushBack(data);
-    else if (index == 1)
+    else if (index == 1) // Если список не пуст и нужно добавить первый элемент списка - вызываем функцию добавить в начало
         PushFront(data);
-    else if (index == size+1)
-        PushBack(data);
-    else
+    else // В противном случае
     {
-        Node *PREV = nullptr;
+        Node *PREV = nullptr; // Создаём указатели на Предыдущий, Следующий и служебный элементы списка, обнуляем их
         Node *NEXT = nullptr;
         Node *temp = nullptr;
-        PREV = NEXT = Serch(PREV,index);
-        PREV = PREV->pPrev;
-        temp = new Node(data,NEXT,PREV);
-        PREV->pNext = temp;
-        NEXT->pPrev = temp;
-        ++size;
+        PREV = NEXT = Serch(PREV,index); // Присваиваем указателям на предыдущий и следующий элементы - результат выполнения фунции поиска элемента
+        PREV = PREV->pPrev; // Указателю на предыдущий элемент - назначаем адрес элемент предшествующего найденному
+        temp = new Node(data,NEXT,PREV); // Создаём новый объект с указателем на предыдущий элемент и на следующий
+        PREV->pNext = temp; // Предыдущему элементу в адрес следующего записываем новый элемент
+        NEXT->pPrev = temp; // Следующему элементу в адрес предыдущего записываем новый элемент
+        ++size; // Увеличиваем счётчик элементов списка
     }
 
 }
 
 void List::Clear()
 {
-    while (head!=tail)
+    while (head!=tail) // Выполнять цикл, пока адреса конца и аначала списка не бедут равны
     {
-        PopFront();
+        PopFront(); // Вызываем функцию удаления первого элемента
     }
-    delete head;
-    head = tail =nullptr;
-    --size;
+    delete head; // Удаляем объект на который ссылается первый элемент списка
+    head = tail =nullptr; // Обнуляем указатели на первый и последний элементы списка
+    --size; // Уменьшаем счётчик элементов списка
 }
 void List::PopBack()
 {
-    Node *temp;
-    tail = tail->pPrev;
-    temp = tail->pNext;
-    tail->pNext = nullptr;
-    delete temp;
-    --size;
+    Node *temp; // Создаём ссылку на элемент списка
+    tail = tail->pPrev; // Присваиваем указателю на последний элемент - адрес предшествующего элемента
+    temp = tail->pNext; //Так как ссылка на последний элемент теперь указывает на предпоследний, берём адресс последнего элемента из его указателя на следующий
+    tail->pNext = nullptr; // Указателю на последний элемент - обнуляем указатель на следующий
+    delete temp; // Так как теперь адрес последнего элемент хранится во временной ссылке, удаляем его через эту ссылку
+    --size; // Уменьшаем счётчик элементов списка
 }
 void List::PopFront()
 {
-    Node *temp = head;
-    head = head->pNext;
-    head->pPrev= nullptr;
-    delete temp;
-    --size;
+    Node *temp = head; //Создаём ссылку на элемент списка и присваиваем ей адресс первого элемента списка
+    head = head->pNext; // Ссылке на первый элемент списка присваиваем адресс следующего элемента
+    head->pPrev= nullptr; // Ссылке на первый элемент обнуляем поле предыдущего элемента
+    delete temp; // Так как первый элемент списка теперь хранится во временной ссылке, удаляем его через эту   ссылку
+    --size; // Уменьшаем счётчик элементов списка
 }
 void List::Remove(int index)
 {
-    if (index == 1)
-        PopFront();
-    else if (index == size)
-        PopBack();
-    else
+    if (index == 1) // Если выбранный для удаления элемент первый элемент списка
+        PopFront(); // То воспользуемся уже имеющейся функцией удаления первого элемента
+    else if (index == size) // Если это последний элемент
+        PopBack(); // Воспользуемся фунцией удаления последнего элемента
+    else // В противном случае
     {
-        Node *PREV = nullptr;
+        Node *PREV = nullptr; // Создаём временные указатели на элементы списка Предыдущий, Следующий и служебный
         Node *NEXT;
         Node *temp;
-        PREV = NEXT = Serch(PREV,index);
-        temp = PREV;
-        PREV = PREV->pPrev;
-        NEXT = NEXT->pNext;
-        PREV->pNext = NEXT;
-        NEXT->pPrev = PREV;
-        delete temp;
-        --size;
+        PREV = NEXT = temp = Serch(PREV,index); // Присваиваем сем трём ссылкам адрес на найденный фунцией поиска элемент
+        PREV = PREV->pPrev; // Предыдущему элементу присваивает адрес предшествующего элемента
+        NEXT = NEXT->pNext; // Следующему элементу присваиваем адресс следующего
+        PREV->pNext = NEXT; // Предыдущему элементу в указатель на следующий элемент присваиваем адресс Следующего
+        NEXT->pPrev = PREV;// А Следующему элементу в адресс предшествующего элемента указываем адресс Предыдущего
+        delete temp; // Таким образом относительно указанного элемента его предыдущий и следующий элементы указывают друг на друга в обход данного объекта, удаляем его через служебную ссылку
+        --size; // Уменьшаем счётчик элементов списка
     }
 }
 
-int List::GetSize() {
+int List::GetSize() { // Просто возвращаем значение поля размера списка
     return size;
 }
 int List::Sum() {
-    int SUM = 0;
-    Node *temp = head;
-    while (temp)
+    int SUM = 0; // Заводим переменную для хранения суммы, обнуляем чтобы убрать мусор
+    Node *temp = head; //Создаём указатель на элемент списка и присваиваем ему адрес первого элемента
+    while (temp) // Цикл будет выполняться до тех пор, пока временный указатель не пройдёт по ссылке на следующий элемент последнего элемента и не примет значение nullptr
     {
-        SUM += temp->data;
-        temp = temp->pNext;
+        SUM += temp->data; // Прибавляем к переменной суммы - данные очередного элемента списка
+        temp = temp->pNext; // Присваиваем текущему элементу адресс следующего
     }
-    return SUM;
+    return SUM; // Возвращаем значение переменной сумма
 }
 void List::Revers() {
-    Node *first = head;
-    Node *lust = tail;
-    Node *temp = new Node;
-    for (int i = 0; i < (size/2); ++i) {
-        temp->data = first->data;
-        first->data = lust->data;
-        lust->data = temp->data;
-        first = first->pNext;
-        lust = lust->pPrev;
+    Node *first = head; // Создаём временные указатели на первый и последний элементы списка
+    Node *lust = tail; // Присваиваем им адреса начала и конца списка соответственно
+    Node *temp = new Node; // Создаём новый элемент списка как временную переменную
+    for (int i = 0; i < (size/2); ++i) { // Суть оего метода разворота списка - Значение под ссылкой первого элемента - положить во временную переменную
+        temp->data = first->data;        // На место первого положить значение из элемента под ссылкой на последний элемент а в него положить данные первого из временной переменной
+        first->data = lust->data;        // После этого сместить ссылки на первый и последний элемент к центру списка через указатели на следующий элемент и предыдущий соответственно
+        lust->data = temp->data;         // Повторять - колличество раз, равное целочисленной половине размера списка, так как идём с двух сторон
+        first = first->pNext;            // Если количество элементов будет чётное, то колличество итераций будет достаточно чтобы поменять местами все элементы
+        lust = lust->pPrev;              // Если колличество буден не чётное, то центральный элемент останется нетронутым, так как он и должен остаться на том же месте
     }
-    delete temp;
+    delete temp; // Удаляем временную переменную для освобождения памяти
 
 }
 int &List::operator[](const int index) {
-    Node *temp = nullptr;
-    int i = index;
-    temp = Serch(temp, i);
-    return temp->data;
+    Node *temp = nullptr; // Создаём временный указатель на элемент списка - обнуляем его
+    int i = index; //Создаём переменную для хранения позиции искомого элемента
+    temp = Serch(temp, i); //Возвращаем во временную ссылку результат функции поиска элемента
+    return temp->data; // Возвращаем хранимые данные из найденного элемента
 }
 
 List::Node *List::Serch(List::Node *PREV, int &index)
-{
-    if ((size - index) >= (size / 2)) {
-        PREV = head;
-        for (int i = 1; i < index; ++i)
+{ // Для начала определяем, ближе искомый элемент к началу или концу.
+    if ((size - index) >= (size / 2)) {  // Если после вычитания индекса элемента из размера списка,
+        // полученное значение будет больше или равен значению половины списка то искомый элемент ближе к началу списка
+        PREV = head; // Присваиваем указателю адрес начала списка
+        for (int i = 1; i < index; ++i) // Так как мой список начинается с 1, то цикл поиска будет начинаться с 1 и будет выполнятся пока значение переменной меньше индекса
         {
-            PREV = PREV->pNext;
+            PREV = PREV->pNext; // Текущему указателю присваиваем адрес следующего элемента
         }
-        return PREV;
-    } else {
-        PREV = tail;
-        int i = size - index;
-        for (int j = 0; j < i; ++j)
+        return PREV; // Возвращаем адресс найденного элемента
+    } else { // В противном случае, элемент ближе к концу списка и искать его будем соответственно с конца
+        PREV = tail; // Ссылке даём адрес конца списка
+        int i = size - index; // Чтобы найти необходимое колличество иттераций цикла инвертируем значение переменной вычитая из размера списка индекс
+        for (int j = 0; j < i; ++j) //
         {
-            PREV = PREV->pPrev;
+            PREV = PREV->pPrev; // Тут мы присваиваем текущей ссылке адрес  предыдущего элемента
         }
-        return PREV;
+        return PREV; // Возвращаем адресс найденного элемента
     }
 }
 
