@@ -27,6 +27,7 @@ public:
     int Back();
     int Sum(); // Получить сумму всех элементов списка
     void Revers(); // Развернуть список
+    void ShowList(List const &a);
     int& operator[] (const int index); // Перегруженный оператор индексирования, позволяет получить выбранный элемент списка
 
 
@@ -54,23 +55,16 @@ private:
 };
 
 std::ostream &operator<<(std::ostream &os, List const &a) {
-    int count = 0; // Счётчик элементов списка - для отображения
     List::Node *current = a.head; // Создаём указатель на текущий элемент и даём ему адрес первого элемента
     std::cout << "\n"; // Отступаем строку для лучшего отображения
     while (current) // Цикл отображающий данные элементов списка
     {
-        ++count;
-        std::cout << count << "\t Data = " << current->data << "\t Current address = " << current;
-        std::cout << "\t Previous address = " << current->pPrev;
-        if (count == 1)
-            std::cout << "\t\t Next address = " << current->pNext << std::endl;
-        else
-            std::cout << "\t Next address = " << current->pNext << std::endl;
+        std::cout << current->data << "  ";
         current = current->pNext; // После завершения вывода, присваиваем указателю на текущий элемент - адресс следующего элемента
     }
     if (a.size) // Проверка существования списка
         std::cout << "\nList is empty!" << std::endl; // Если список пуст, вывести информацию об этом на экран
-    std::cout << "Size = " << a.size << std::endl; // Выводим размер списка
+    std::cout << std::endl;
 };
 
 List::List():head(nullptr), tail(nullptr), size(0) {} // Определяем конструктор списка по умолчанию
@@ -218,6 +212,25 @@ void List::Revers() {
     }
     delete temp; // Удаляем временную переменную для освобождения памяти
 
+}
+void List::ShowList(List const &a) {
+    int count = 0; // Счётчик элементов списка - для отображения
+    List::Node *current = a.head; // Создаём указатель на текущий элемент и даём ему адрес первого элемента
+    std::cout << "\n"; // Отступаем строку для лучшего отображения
+    while (current) // Цикл отображающий данные элементов списка
+    {
+        ++count;
+        std::cout << count << "\t Data = " << current->data << "\t Current address = " << current;
+        std::cout << "\t Previous address = " << current->pPrev;
+        if (count == 1)
+            std::cout << "\t\t Next address = " << current->pNext << std::endl;
+        else
+            std::cout << "\t Next address = " << current->pNext << std::endl;
+        current = current->pNext; // После завершения вывода, присваиваем указателю на текущий элемент - адресс следующего элемента
+    }
+    if (a.size) // Проверка существования списка
+        std::cout << "\nList is empty!" << std::endl; // Если список пуст, вывести информацию об этом на экран
+    std::cout << "Size = " << a.size << std::endl; // Выводим размер списка
 }
 int &List::operator[](const int index) {
     Node *temp = nullptr; // Создаём временный указатель на элемент списка - обнуляем его
