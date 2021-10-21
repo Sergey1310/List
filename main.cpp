@@ -2,7 +2,7 @@
 #include <functional>
 #include "List.h"
 
-void TestCommon(std::string testName, std::function<bool ()> testFunc) {
+void TestCommon(const std::string& testName, std::function<bool ()> testFunc) {
     try {
         if (testFunc()) {
             std::cout << "\033[32m" << testName << " OK" << "\033[39m" << std::endl;

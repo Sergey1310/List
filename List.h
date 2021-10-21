@@ -65,6 +65,7 @@ std::ostream &operator<<(std::ostream &os, List const &a) {
     if (a.size) // Проверка существования списка
         std::cout << "\nList is empty!" << std::endl; // Если список пуст, вывести информацию об этом на экран
     std::cout << std::endl;
+    return os;
 };
 
 List::List():head(nullptr), tail(nullptr), size(0) {} // Определяем конструктор списка по умолчанию
@@ -121,9 +122,6 @@ void List::Clear()
     {
         PopFront(); // Вызываем функцию удаления первого элемента
     }
-    delete head; // Удаляем объект на который ссылается первый элемент списка
-    head = tail =nullptr; // Обнуляем указатели на первый и последний элементы списка
-    --size; // Уменьшаем счётчик элементов списка
 }
 void List::PopBack()
 {
@@ -138,6 +136,7 @@ void List::PopBack()
         }else
         {
             delete head;
+            head = tail = nullptr;
             --size;
         }
     } else std::cout << "List is empty!" << std::endl;
@@ -154,6 +153,7 @@ void List::PopFront()
         }else
         {
             delete head;
+            head = tail = nullptr;
             --size;
         }
     } else std::cout << "List is empty!" << std::endl;
