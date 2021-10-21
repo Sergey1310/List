@@ -14,7 +14,7 @@ void TestCommon(std::string testName, std::function<bool ()> testFunc) {
         std::cout << "\033[31m" << testName << " ERROR " << "\033[39m" << ex.what() << std::endl;
     }
 }
-
+//
 const int SIZE = 10;
 
 bool TestSizeNewEmptyList() {
