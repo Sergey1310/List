@@ -56,7 +56,7 @@ bool TestPopOneFormList() {
 
     List list2;
     list2.PushFront(1);
-    list.PopBack();
+    list.PopBack(); // тут точтно должен быть list а не list2?
     if (list2.GetSize() != 0) return false;
 
     List list3;
